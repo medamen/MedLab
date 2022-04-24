@@ -175,6 +175,7 @@ else
         PlayerSection:NewSlider("Jump Power", "Change the jump power", 250, 50, function(v) -- 500 (MaxValue) | 0 (MinValue)
             game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
         end)
+        local PlayerSection = Player:NewSection("Misc")
         -- ctrl+click TP
         PlayerSection:NewToggle("TP", "TP", function(state)
             if state then
@@ -234,13 +235,16 @@ else
             loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/Ngabret.lua", true))()
         end)
         -- ESP
-        PlayerSection:NewButton("ESP", "ButtonInfo", function()
-            local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
-            ESP:Toggle(true)
-        end)
-        PlayerSection:NewButton("ESP X", "ButtonInfo", function()
-            local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
-            ESP:Toggle(false)
+        PlayerSection:NewToggle("ESP", "Toggle", function(state)
+            if state then
+                getgenv().Toggle = true
+                local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+                ESP:Toggle(true)
+            else
+                getgenv().Toggle = false
+                local ESP = nil
+                ESP:Toggle(false)
+            end
         end)
     
     -- Setting
