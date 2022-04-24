@@ -8,7 +8,7 @@ local holdingSKey = false
 local holdingAKey = false
 local holdingDKey = false
 local holdingSpaceKey = false
-local holdingControlKey = false
+local holdingShiftKey = false
 
 Speed_1 = -1
 
@@ -99,7 +99,7 @@ end)
 
 game:GetService('RunService').Stepped:connect(function()
    if startup then
-    if ControlHeld == true then
+    if ShiftHeld == true then
     player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,Speed_1,0)
        end
    end
@@ -122,8 +122,8 @@ User.InputBegan:Connect(function(inputObject)
    if(inputObject.KeyCode==Enum.KeyCode.D) then
        holdingDKey = true DHeld = true
    end
-   if(inputObject.KeyCode==Enum.KeyCode.LeftControl) then
-       holdingControlKey = true ControlHeld = true
+   if(inputObject.KeyCode==Enum.KeyCode.LeftShift) then
+       holdingShiftKey = true ShiftHeld = true
    end
 
    if(inputObject.KeyCode==Enum.KeyCode.Space) then
@@ -152,8 +152,8 @@ User.InputEnded:Connect(function(inputObject)
        holdingDKey = false DHeld = false    
    end
 
-   if(inputObject.KeyCode==Enum.KeyCode.LeftControl) then
-       holdingShiftKey = false ControlHeld = false    
+   if(inputObject.KeyCode==Enum.KeyCode.LeftShift) then
+       holdingShiftKey = false ShiftHeld = false    
    end
 
    if(inputObject.KeyCode==Enum.KeyCode.Space) then
