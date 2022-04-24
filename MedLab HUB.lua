@@ -233,6 +233,15 @@ else
         PlayerSection:NewButton("FLY", "Toggle M", function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/Ngabret.lua", true))()
         end)
+        -- ESP
+        PlayerSection:NewButton("ESP", "ButtonInfo", function()
+            local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+            ESP:Toggle(true)
+        end)
+        PlayerSection:NewButton("ESP X", "ButtonInfo", function()
+            local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+            ESP:Toggle(false)
+        end)
     
     -- Setting
     local Setting = Window:NewTab("Setting")
