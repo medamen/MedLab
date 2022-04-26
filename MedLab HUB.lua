@@ -175,9 +175,11 @@ else
         PlayerSection:NewSlider("Jump Power", "Change the jump power", 250, 50, function(v) -- 500 (MaxValue) | 0 (MinValue)
             game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
         end)
-        local PlayerSection = Player:NewSection("Misc")
+
+        --TP
+        local PlayerSection = Player:NewSection("TP")
         -- ctrl+click TP
-        PlayerSection:NewToggle("TP", "TP", function(state)
+        PlayerSection:NewToggle("ctrl+click TP", "TP", function(state)
             if state then
                 getgenv().Enabled = true
 
@@ -220,8 +222,11 @@ else
                 getgenv().Enabled = false
             end
         end)
+        -- MISC
+        local PlayerSection = Player:NewSection("Misc")
+        
         -- alt+click delete
-        PlayerSection:NewButton("Alt+Click Delete", "ButtonInfo", function()
+        PlayerSection:NewButton("Alt+Click Delete", "Delete Wall On Click", function()
             local Plr = game:GetService("Players").LocalPlayer
             local Mouse = Plr:GetMouse()
 
