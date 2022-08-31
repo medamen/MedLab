@@ -299,15 +299,6 @@ else
         if not f then print("No different server found!") end
     end)
     
-
-    -- Setting
-    local Setting = Window:NewTab("Setting")
-    local SettingSection = Setting:NewSection("Setting")
-        -- Toggle UI
-        SettingSection:NewKeybind("Toggle UI", "KeybindInfo", Enum.KeyCode.RightControl, function()
-            Library:ToggleUI()
-        end)
-        
     -- Tools
     local Tools = Window:NewTab("Tools")
     local ToolsSection = Tools:NewSection("Tools")
@@ -327,6 +318,16 @@ else
         ToolsSection:NewButton("TP to Player", "TP", function()
             loadstring(game:HttpGet("https://pastebin.com/raw/H7UXP01e", true))()
          end)
+
+    -- Setting
+    local Setting = Window:NewTab("Setting")
+    local SettingSection = Setting:NewSection("Setting")
+        -- Toggle UI
+        SettingSection:NewKeybind("Toggle UI", "KeybindInfo", Enum.KeyCode.RightControl, function()
+            Library:ToggleUI()
+        end)
+        
+    
 
     -- Credits
     local Credits = Window:NewTab("Credits")
