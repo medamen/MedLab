@@ -251,7 +251,55 @@ else
                 ESP:Toggle(false)
             end
         end)
+
+    -- Server
+    local Server = Window:NewTab("Server")
+    local ServerSection = Server:NewSection("Section Name")
+
+    -- Rejoin
+    ServerSection:NewButton("Rejoin", "Rejoin The Same Server", function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
+    end)
+    -- Rejoin Smallest Server
+    ServerSection:NewButton("Rejoin Smallest Server", "Rejoin The Smallest Server", function()
+
+        local Http = game:GetService("HttpService")
+        local TPS = game:GetService("TeleportService")
+        local Api = "https://games.roblox.com/v1/games/"
+
+        local _place = game.PlaceId
+        local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+        function ListServers(cursor)
+        local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+        return Http:JSONDecode(Raw)
+        end
+
+        local Server, Next; repeat
+        local Servers = ListServers(Next)
+        Server = Servers.data[1]
+        Next = Servers.nextPageCursor
+        until Server
+
+        TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
+    end)
+    -- Change Server
+    ServerSection:NewButton("Change Server", "Change to the Different Server", function()
+        
+        local HTTPS = game:GetService("HttpService")
+        local TPS = game:GetService("TeleportService")
+        local SERVERS = HTTPS:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+
+        local f = false
+        for _,v in pairs(SERVERS.data) do
+            if v.playing < v.maxPlayers and v.id ~= game.JobId then
+                TPS:TeleportToPlaceInstance(game.PlaceId, v.id)
+                f = true
+            end
+        end
+        if not f then print("No different server found!") end
+    end)
     
+
     -- Setting
     local Setting = Window:NewTab("Setting")
     local SettingSection = Setting:NewSection("Setting")
@@ -264,9 +312,18 @@ else
     local Tools = Window:NewTab("Tools")
     local ToolsSection = Tools:NewSection("Tools")
          --Simple Spy 2
-        ToolsSection:NewButton("Simple Spy 2", "SPY", function()
+        ToolsSection:NewButton("Simple Spy 2", "Remote Spy", function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/JamesBond2.lua", true))()
          end)
+         --Turtle Spy
+        ToolsSection:NewButton("Turtle Spy", "Remote Spy", function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/BDhSQqUU", true))()
+         end)
+         --Infinite Yield
+        ToolsSection:NewButton("Inf Yield", "CMDS", function()
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+         end)
+         
 
     -- Credits
     local Credits = Window:NewTab("Credits")
