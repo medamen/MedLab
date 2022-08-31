@@ -323,7 +323,10 @@ else
         ToolsSection:NewButton("Inf Yield", "CMDS", function()
             loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
          end)
-         
+         --TP to Player
+        ToolsSection:NewButton("TP to Player", "TP", function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/H7UXP01e", true))()
+         end)
 
     -- Credits
     local Credits = Window:NewTab("Credits")
