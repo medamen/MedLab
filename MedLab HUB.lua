@@ -318,6 +318,22 @@ else
         ToolsSection:NewButton("TP to Player", "TP", function()
             loadstring(game:HttpGet("https://pastebin.com/raw/H7UXP01e", true))()
          end)
+         --Print Object Names
+        ToolsSection:NewButton("Print Object Names", "Tool", function()
+            local tool = Instance.new("Tool")
+            tool.Name = "Print Clicked Object Name"
+            tool.RequiresHandle = false
+            tool.CanBeDropped = false
+            tool.Parent = game.Players.LocalPlayer.Backpack
+
+            tool.Equipped:Connect(function(mouse)
+            mouse.Button1Down:connect(function()
+            if mouse.Target and mouse.Target.Parent then
+            print(mouse.Target.Name.." | "..mouse.Target:GetFullName())
+            end
+            end)
+            end)
+         end)
 
     -- Setting
     local Setting = Window:NewTab("Setting")
