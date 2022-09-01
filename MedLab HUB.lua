@@ -175,7 +175,10 @@ else
         PlayerSection:NewSlider("Jump Power", "Change the jump power", 250, 50, function(v) -- 500 (MaxValue) | 0 (MinValue)
             game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
         end)
-
+        -- Reset
+        PlayerSection:NewButton("Reset", "Force Reset", function()
+            game.Players.LocalPlayer.Character.Humanoid.Health = 0
+        end)
         --TP
         local PlayerSection = Player:NewSection("TP")
         -- ctrl+click TP
