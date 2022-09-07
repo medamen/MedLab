@@ -166,7 +166,6 @@ elseif game.PlaceId == 9414511685 then
     local Window = Library.CreateLib("MedLab | Drive Cars Down A Hill!", "Ocean")
         -- Values
         _G.CFL = true
-        _G.ACD = true
         -- Functions
         function CFL() -- Cash Farm Loop
             while _G.CFL == true do
@@ -176,9 +175,6 @@ elseif game.PlaceId == 9414511685 then
                 wait(1)
             end
         end
-
- 
-
 
     -- Main
     local Main = Window:NewTab("Main")
