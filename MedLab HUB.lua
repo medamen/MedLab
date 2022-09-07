@@ -179,7 +179,7 @@ elseif game.PlaceId == 9414511685 then
     -- Main
     local Main = Window:NewTab("Main")
     local MainSection = Main:NewSection("Main")
-        
+    
         --TP END
         MainSection:NewButton("The End", "TP to The End", function()
             Game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-26.23527717590332,-2582.30029296875,26233.322265625)
@@ -188,10 +188,55 @@ elseif game.PlaceId == 9414511685 then
         MainSection:NewButton("Spawn", "TP to Spawn", function()
             Game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(20.11614990234375,512.099609375,181.80662536621094)
         end)
+         --TP Checkpoint 1
+         MainSection:NewButton("Checkpoint 1", "TP to Checkpoint 1", function()
+            Game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-82.15776824951172,-2710.546630859375,15664.6669921875)
+        end)
         --LOOP
         MainSection:NewToggle("Loop TP SPAWN", "FARM MONEY", function(value)
             _G.CFL = value
             CFL()
+        end)
+        --Server Destroyer
+        MainSection:NewButton("Destroy Server", "Server Destroyer", function()
+            local ShatterGlass = select(2, pcall(function()
+                return game:GetService("ReplicatedStorage").Remotes.ShatterGlass
+                end))
+                
+                if typeof(ShatterGlass) == 'Instance' and ShatterGlass:IsA("RemoteEvent") then
+                for _, v in pairs(workspace:GetDescendants()) do
+                ShatterGlass:FireServer(v)
+                end
+                end
+        end)
+
+    MainSection:NewLabel("Spawner")
+        
+        -- Spawner
+        MainSection:NewDropdown("Cars", "Spawn Car", {"Jalopy", "Lada", "SUV", "Sedan", "Flatbed Truck", "Pickup Truck", "Sedan Jalopy", "Offroader", "Police Lada", "Sedan Muscle", "Humvee"}, function(SelectedCars)
+            if SelectedCars == "Jalopy" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Jalopy")
+            elseif SelectedCars == "Lada" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Lada")
+            elseif SelectedCars == "SUV" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"SUV")
+            elseif SelectedCars == "Sedan" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Sedan")
+            elseif SelectedCars == "Flatbed Truck" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Flatbed Truck")
+            elseif SelectedCars == "Pickup Truck" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"PickupTruck")
+            elseif SelectedCars == "Sedan Jalopy" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Sedan Jalopy")
+            elseif SelectedCars == "Offroader" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Offroader")
+            elseif SelectedCars == "Police Lada" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Police Lada")
+            elseif SelectedCars == "Sedan Muscle" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Sedan Muscle")
+            elseif SelectedCars == "Humvee" then
+                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,"Humvee")
+            end
         end)
 
 
@@ -205,6 +250,10 @@ elseif game.PlaceId == 9414511685 then
     -- Jump Power
     PlayerSection:NewSlider("Jump Power", "Change the jump power", 250, 50, function(v) -- 500 (MaxValue) | 0 (MinValue)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
+    end)
+    --TP to Player
+    PlayerSection:NewButton("TP to Player", "TP", function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/H7UXP01e", true))()
     end)
     -- Reset
     PlayerSection:NewButton("Reset", "Force Reset", function()
@@ -271,10 +320,12 @@ elseif game.PlaceId == 9414511685 then
                 Mouse.Target:Destroy()
                 end)
     end)
-
+    
+    -- FLY
     PlayerSection:NewButton("FLY", "Toggle M", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/Ngabret.lua", true))()
     end)
+
     -- ESP
     PlayerSection:NewToggle("ESP", "Toggle", function(state)
         if state then
@@ -287,6 +338,7 @@ elseif game.PlaceId == 9414511685 then
             ESP:Toggle(false)
         end
     end)
+    
 
     -- Server
     local Server = Window:NewTab("Server")
@@ -350,10 +402,6 @@ elseif game.PlaceId == 9414511685 then
         ToolsSection:NewButton("Inf Yield", "CMDS", function()
             loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
         end)
-        --TP to Player
-        ToolsSection:NewButton("TP to Player", "TP", function()
-            loadstring(game:HttpGet("https://pastebin.com/raw/H7UXP01e", true))()
-        end)
         --Print Object Names
         ToolsSection:NewButton("Print Object Names", "Tool", function()
             local tool = Instance.new("Tool")
@@ -400,6 +448,10 @@ else
         -- Jump Power
         PlayerSection:NewSlider("Jump Power", "Change the jump power", 250, 50, function(v) -- 500 (MaxValue) | 0 (MinValue)
             game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
+        end)
+        --TP to Player
+        PlayerSection:NewButton("TP to Player", "TP", function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/H7UXP01e", true))()
         end)
         -- Reset
         PlayerSection:NewButton("Reset", "Force Reset", function()
@@ -465,9 +517,12 @@ else
             Mouse.Target:Destroy()
             end)
         end)
+
+        -- FLY
         PlayerSection:NewButton("FLY", "Toggle M", function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/Ngabret.lua", true))()
         end)
+
         -- ESP
         PlayerSection:NewToggle("ESP", "Toggle", function(state)
             if state then
@@ -542,10 +597,6 @@ else
          --Infinite Yield
         ToolsSection:NewButton("Inf Yield", "CMDS", function()
             loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
-         end)
-         --TP to Player
-        ToolsSection:NewButton("TP to Player", "TP", function()
-            loadstring(game:HttpGet("https://pastebin.com/raw/H7UXP01e", true))()
          end)
          --Print Object Names
         ToolsSection:NewButton("Print Object Names", "Tool", function()
