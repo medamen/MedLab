@@ -535,10 +535,37 @@ else
                 ESP:Toggle(false)
             end
         end)
+    
+    -- Teleport
+    local Teleport = Window:NewTab("Teleport")
+    local TeleportSection = Teleport:NewSection("Teleport")
+        -- Values
+        _G.SelectPlayer = true
+        local PlayerTable = {}
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v~=game.Players.LocalPlayer then
+                PlayerTable[#PlayerTable+1] = v.Name
+            end
+         end
+        -- Function
+         
+
+    local SelectedPlayer;
+
+    local Playerdropdown = TeleportSection:NewDropdown("Player","Info",PlayerTable, function(value)
+        SelectedPlayer = value;
+        print(value)
+    end)
+    TeleportSection:NewButton("Refresh", "Refreshes Dropdown", function()
+        unpack(PlayerTable)
+    end)
+    TeleportSection:NewButton("Teleport", "ButtonInfo", function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild(SelectedPlayer).HumanoidRootPart.CFrame
+    end)
 
     -- Server
     local Server = Window:NewTab("Server")
-    local ServerSection = Server:NewSection("Section Name")
+    local ServerSection = Server:NewSection("Server")
 
     -- Rejoin
     ServerSection:NewButton("Rejoin", "Rejoin The Same Server", function()
