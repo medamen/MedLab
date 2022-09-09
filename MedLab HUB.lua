@@ -54,6 +54,45 @@ if game.PlaceId == 155615604 then
 
     -- Main
     local MainTab = Window:NewTab("Main")
+    local MainSection = MainTab:NewSection("Main")  
+        -- Bypass arrest
+        MainSection:NewToggle("Bypass Arrest", "NO CD ARREST", function(state)
+            if state then
+                getgenv().BA = true
+                local mouse = game.Players.LocalPlayer:GetMouse()
+                local arrestEvent = game.Workspace.Remote.arrest
+                mouse.Button1Down:connect(function()
+                if getgenv().BA == true then
+                local obj = mouse.Target
+                local response = arrestEvent:InvokeServer(obj)
+                end
+                end)
+            else
+                getgenv().BA = false
+            end
+        end)
+        -- Give Key Card
+        MainSection:NewButton("Key Card", "Get Weapon", function()
+            local OldPosition = nil
+            if game.workspace.Prison_ITEMS.single:FindFirstChild("Key card") then
+                game.workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.single:FindFirstChild("Key card").ITEMPICKUP)
+            else
+                OldPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+                local NoCardFound = true
+                while NoCardFound == true do
+                    game.workspace.Remote.TeamEvent:FireServer("Bright blue")
+                    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+                    if game.workspace.Prison_ITEMS.single:FindFirstChild("Key card") then
+                        NoCardFound = false
+                        workspace.Remote.TeamEvent:FireServer("Bright orange")
+                        workspace.Remote.loadchar:InvokeServer(game.Players.LocalPlayer.Name)
+                        game.workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.single:FindFirstChild("Key card").ITEMPICKUP)
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(OldPosition)
+                    end
+                wait()
+                end
+            end
+        end)
         -- Weapon Giver
         local MainSection = MainTab:NewSection("Weapon")  
         local SelectedWeapon;
