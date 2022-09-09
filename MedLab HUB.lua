@@ -146,14 +146,21 @@ if game.PlaceId == 155615604 then
         -- MISC
         local PlayerSection = Player:NewSection("Misc")
         -- alt+click delete
-        PlayerSection:NewButton("Alt+Click Delete", "Delete Wall On Click", function()
-            local Plr = game:GetService("Players").LocalPlayer
-            local Mouse = Plr:GetMouse()
-            Mouse.Button1Down:connect(function()
-            if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
-            if not Mouse.Target then return end
-            Mouse.Target:Destroy()
-            end)
+        PlayerSection:NewToggle("Alt Click Delete", "Delete Wall", function(state)
+            if state then
+                getgenv().ACD = true
+                local Plr = game:GetService("Players").LocalPlayer
+                local Mouse = Plr:GetMouse()
+                Mouse.Button1Down:connect(function()
+                if getgenv().ACD == true then
+                if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
+                if not Mouse.Target then return end
+                Mouse.Target:Destroy()
+                end
+                end)
+            else
+                getgenv().ACD = false
+            end
         end)
         -- FLY
         PlayerSection:NewButton("FLY", "Toggle M", function()
@@ -171,10 +178,12 @@ if game.PlaceId == 155615604 then
                 ESP:Toggle(false)
             end
         end)
-
-        -- Teleport
-        local Teleport = Window:NewTab("Teleport")
-        local TeleportSection = Teleport:NewSection("Teleport")
+        -- TEST
+        PlayerSection:NewLabel("TEST")
+        
+    -- Teleport
+    local Teleport = Window:NewTab("Teleport")
+    local TeleportSection = Teleport:NewSection("Teleport")
         -- Player Dropdown
         local SelectedPlayer;
         local Playerdropdown = TeleportSection:NewDropdown("Player","Info",PlayerTable, function(value)
@@ -308,49 +317,6 @@ elseif game.PlaceId == 9414511685 then
             end
          end
 
-    -- Main
-    local Main = Window:NewTab("Main")
-    local MainSection = Main:NewSection("Main")
-        --TP END
-        MainSection:NewButton("The End", "TP to The End", function()
-            Game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-26.23527717590332,-2582.30029296875,26233.322265625)
-        end)
-        --TP Spawn
-        MainSection:NewButton("Spawn", "TP to Spawn", function()
-            Game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(20.11614990234375,512.099609375,181.80662536621094)
-        end)
-         --TP Checkpoint 1
-         MainSection:NewButton("Checkpoint 1", "TP to Checkpoint 1", function()
-            Game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-82.15776824951172,-2710.546630859375,15664.6669921875)
-        end)
-        --LOOP
-        MainSection:NewToggle("Loop TP SPAWN", "FARM MONEY", function(value)
-            _G.CFL = value
-            CFL()
-        end)
-        --Server Destroyer
-        MainSection:NewButton("Destroy Server", "Server Destroyer", function()
-            local ShatterGlass = select(2, pcall(function()
-                return game:GetService("ReplicatedStorage").Remotes.ShatterGlass
-                end))
-                
-                if typeof(ShatterGlass) == 'Instance' and ShatterGlass:IsA("RemoteEvent") then
-                for _, v in pairs(workspace:GetDescendants()) do
-                ShatterGlass:FireServer(v)
-                end
-                end
-        end)
-        -- Spawner
-        MainSection:NewLabel("Spawner")
-            local SelectedVehicle;
-            local Vehicledropdown = MainSection:NewDropdown("Dropdown","Info", VehicleTable, function(value)
-                    SelectedVehicle = value
-                    print(value)
-            end)
-            MainSection:NewButton("Spawn", "Refreshes Dropdown", function()
-                game:GetService("ReplicatedStorage").SpawnCar:FireServer(0,SelectedVehicle)
-            end)
- 
     -- Player
     local Player = Window:NewTab("Player")
     local PlayerSection = Player:NewSection("Player")
@@ -419,14 +385,21 @@ elseif game.PlaceId == 9414511685 then
         -- MISC
         local PlayerSection = Player:NewSection("Misc")
         -- alt+click delete
-        PlayerSection:NewButton("Alt+Click Delete", "Delete Wall On Click", function()
-            local Plr = game:GetService("Players").LocalPlayer
-            local Mouse = Plr:GetMouse()
-            Mouse.Button1Down:connect(function()
-            if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
-            if not Mouse.Target then return end
-            Mouse.Target:Destroy()
-            end)
+        PlayerSection:NewToggle("Alt Click Delete", "Delete Wall", function(state)
+            if state then
+                getgenv().ACD = true
+                local Plr = game:GetService("Players").LocalPlayer
+                local Mouse = Plr:GetMouse()
+                Mouse.Button1Down:connect(function()
+                if getgenv().ACD == true then
+                if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
+                if not Mouse.Target then return end
+                Mouse.Target:Destroy()
+                end
+                end)
+            else
+                getgenv().ACD = false
+            end
         end)
         -- FLY
         PlayerSection:NewButton("FLY", "Toggle M", function()
@@ -444,7 +417,9 @@ elseif game.PlaceId == 9414511685 then
                 ESP:Toggle(false)
             end
         end)
-
+        -- TEST
+        PlayerSection:NewLabel("TEST")
+        
     -- Teleport
     local Teleport = Window:NewTab("Teleport")
     local TeleportSection = Teleport:NewSection("Teleport")
@@ -644,14 +619,21 @@ elseif game.PlaceId == 4954752502 then
         -- MISC
         local PlayerSection = Player:NewSection("Misc")
         -- alt+click delete
-        PlayerSection:NewButton("Alt+Click Delete", "Delete Wall On Click", function()
-            local Plr = game:GetService("Players").LocalPlayer
-            local Mouse = Plr:GetMouse()
-            Mouse.Button1Down:connect(function()
-            if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
-            if not Mouse.Target then return end
-            Mouse.Target:Destroy()
-            end)
+        PlayerSection:NewToggle("Alt Click Delete", "Delete Wall", function(state)
+            if state then
+                getgenv().ACD = true
+                local Plr = game:GetService("Players").LocalPlayer
+                local Mouse = Plr:GetMouse()
+                Mouse.Button1Down:connect(function()
+                if getgenv().ACD == true then
+                if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
+                if not Mouse.Target then return end
+                Mouse.Target:Destroy()
+                end
+                end)
+            else
+                getgenv().ACD = false
+            end
         end)
         -- FLY
         PlayerSection:NewButton("FLY", "Toggle M", function()
@@ -669,7 +651,9 @@ elseif game.PlaceId == 4954752502 then
                 ESP:Toggle(false)
             end
         end)
-    
+        -- TEST
+        PlayerSection:NewLabel("TEST")
+        
     -- Teleport
     local Teleport = Window:NewTab("Teleport")
     local TeleportSection = Teleport:NewSection("Teleport")
@@ -731,23 +715,23 @@ elseif game.PlaceId == 4954752502 then
             end
             if not f then print("No different server found!") end
         end)
-    
+
     -- Tools
     local Tools = Window:NewTab("Tools")
     local ToolsSection = Tools:NewSection("Tools")
-         --Simple Spy 2
+        --Simple Spy 2
         ToolsSection:NewButton("Simple Spy 2", "Remote Spy", function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/JamesBond2.lua", true))()
-         end)
-         --Turtle Spy
+        end)
+        --Turtle Spy
         ToolsSection:NewButton("Turtle Spy", "Remote Spy", function()
             loadstring(game:HttpGet("https://pastebin.com/raw/BDhSQqUU", true))()
-         end)
-         --Infinite Yield
+        end)
+        --Infinite Yield
         ToolsSection:NewButton("Inf Yield", "CMDS", function()
             loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
-         end)
-         --Print Object Names
+        end)
+        --Print Object Names
         ToolsSection:NewButton("Print Object Names", "Tool", function()
             local tool = Instance.new("Tool")
             tool.Name = "Print Clicked Object Name"
@@ -761,7 +745,7 @@ elseif game.PlaceId == 4954752502 then
             end
             end)
             end)
-         end)
+        end)
 
     -- Setting
     local Setting = Window:NewTab("Setting")
@@ -774,7 +758,6 @@ elseif game.PlaceId == 4954752502 then
     -- Credits
     local Credits = Window:NewTab("Credits")
     local CreditsSection = Credits:NewSection("Credits")
-
 
 else -- MedLab Hub CORE
     local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
@@ -857,14 +840,21 @@ else -- MedLab Hub CORE
         -- MISC
         local PlayerSection = Player:NewSection("Misc")
         -- alt+click delete
-        PlayerSection:NewButton("Alt+Click Delete", "Delete Wall On Click", function()
-            local Plr = game:GetService("Players").LocalPlayer
-            local Mouse = Plr:GetMouse()
-            Mouse.Button1Down:connect(function()
-            if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
-            if not Mouse.Target then return end
-            Mouse.Target:Destroy()
-            end)
+        PlayerSection:NewToggle("Alt Click Delete", "Delete Wall", function(state)
+            if state then
+                getgenv().ACD = true
+                local Plr = game:GetService("Players").LocalPlayer
+                local Mouse = Plr:GetMouse()
+                Mouse.Button1Down:connect(function()
+                if getgenv().ACD == true then
+                if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
+                if not Mouse.Target then return end
+                Mouse.Target:Destroy()
+                end
+                end)
+            else
+                getgenv().ACD = false
+            end
         end)
         -- FLY
         PlayerSection:NewButton("FLY", "Toggle M", function()
@@ -882,7 +872,9 @@ else -- MedLab Hub CORE
                 ESP:Toggle(false)
             end
         end)
-    
+        -- TEST
+        PlayerSection:NewLabel("TEST")
+        
     -- Teleport
     local Teleport = Window:NewTab("Teleport")
     local TeleportSection = Teleport:NewSection("Teleport")
