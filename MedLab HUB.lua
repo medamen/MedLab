@@ -1442,7 +1442,7 @@ elseif game.PlaceId == 9759729519 then
         local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
         getgenv().Zombie = true
 
-    -- Player
+    -- Main
     local Main        = Window:NewTab("Main")
     local MainSection = Main:NewSection("Main")
         MainSection:NewButton("Zombie ESP", "Toggle", function()
@@ -2422,6 +2422,417 @@ elseif game.PlaceId == 9898710720 then
         MainSection:NewToggle("Auto Collect Money", "", function(value)
             getgenv().ACM = value
             ACM()
+        end)
+
+    -- Player
+    local Player        = Window:NewTab("Player")
+    local PlayerSection = Player:NewSection("Player")
+        -- Kiriot ESP Lib
+        local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+        ESP:Toggle(true)
+        -- Toggler
+        PlayerSection:NewButton("ESP", "Toggle", function()
+            if getgenv().ET == true then
+                getgenv().ET = false
+                ESP:Toggle(true)
+            else
+                getgenv().ET = true
+                ESP:Toggle(false)
+            end
+        end)
+        -- Walk SPeed
+        PlayerSection:NewSlider("Walk Speed", "Change the walkspeed", 250, 16, function(v) -- 500 (MaxValue) | 0 (MinValue)
+            PP2.WalkSpeed = v
+        end)
+        -- Jump Power
+        PlayerSection:NewSlider("Jump Power", "Change the jump power", 250, 50, function(v) -- 500 (MaxValue) | 0 (MinValue)
+            PP2.JumpPower = v
+        end)
+        -- Reset
+        PlayerSection:NewButton("Reset", "Force Reset", function()
+            PP2.Health = 0
+        end)
+        -- MISC
+        local PlayerSection = Player:NewSection("Misc")
+        -- ctrl+click TP
+        PlayerSection:NewToggle("ctrl+click TP", "TP", function(state)
+            if state then
+                getgenv().Enabled = true
+                local speed = 10000
+                local bodyvelocityenabled = true
+                local UIS = game:GetService("UserInputService")
+                local Plr = game.Players.LocalPlayer
+                local Mouse = Plr:GetMouse()
+                function To(position)
+                local Chr = Plr.Character
+                if Chr ~= nil then
+                local ts = game:GetService("TweenService")
+                local char = game.Players.LocalPlayer.Character
+                local hm = char.HumanoidRootPart
+                local dist = (hm.Position - Mouse.Hit.p).magnitude
+                local tweenspeed = dist/tonumber(speed)
+                local ti = TweenInfo.new(tonumber(tweenspeed), Enum.EasingStyle.Linear)
+                local tp = {CFrame = CFrame.new(position)}
+                ts:Create(hm, ti, tp):Play()
+                if bodyvelocityenabled == true then
+                local bv = Instance.new("BodyVelocity")
+                bv.Parent = hm
+                bv.MaxForce = Vector3.new(100000,100000,100000)
+                bv.Velocity = Vector3.new(0,0,0)
+                wait(tonumber(tweenspeed))
+                bv:Destroy()
+                end
+                end
+                end
+                UIS.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and Enabled then
+                To(Mouse.Hit.p)
+                end
+                end)
+            else
+                getgenv().Enabled = false
+            end
+        end)
+        -- alt+click delete
+        PlayerSection:NewToggle("Alt Click Delete", "Delete Wall", function(state)
+            if state then
+                getgenv().ACD = true
+                local Plr = game:GetService("Players").LocalPlayer
+                local Mouse = Plr:GetMouse()
+                Mouse.Button1Down:connect(function()
+                if getgenv().ACD == true then
+                if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
+                if not Mouse.Target then return end
+                Mouse.Target:Destroy()
+                end
+                end)
+            else
+                getgenv().ACD = false
+            end
+        end)
+        -- FLY
+        PlayerSection:NewButton("FLY", "Toggle M", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/Ngabret.lua", true))()
+        end)
+        
+    -- Teleport
+    local Teleport          = Window:NewTab("Teleport")
+    local TeleportSection   = Teleport:NewSection("Teleport")
+        -- Tables
+        local PlayerTable = {} -- Player Table for TP
+        for i,v in pairs(GSP:GetPlayers()) do
+            if v~=PP then
+                PlayerTable[#PlayerTable+1] = v.Name
+            end
+        end
+        -- Player Dropdown
+        local SelectedPlayer;
+        local Playerdropdown = TeleportSection:NewDropdown("Player","Info",PlayerTable, function(value)
+                SelectedPlayer = value;
+                print(value)
+            end)
+            TeleportSection:NewButton("Refresh", "Refreshes Dropdown", function()
+                unpack(PlayerTable)
+            end)
+            TeleportSection:NewButton("Teleport", "ButtonInfo", function()
+                PP3.CFrame = WS:FindFirstChild(SelectedPlayer).HumanoidRootPart.CFrame
+            end)
+
+    -- Server
+    local Server = Window:NewTab("Server")
+    local ServerSection = Server:NewSection("Server")
+        -- Rejoin
+        ServerSection:NewButton("Rejoin", "Rejoin The Same Server", function()
+            GSTS:Teleport(game.PlaceId, GSP.LocalPlayer)
+        end)
+        -- Rejoin Smallest Server
+        ServerSection:NewButton("Rejoin Smallest Server", "Rejoin The Smallest Server", function()
+            local Http = game:GetService("HttpService")
+            local TPS = game:GetService("TeleportService")
+            local Api = "https://games.roblox.com/v1/games/"
+            local _place = game.PlaceId
+            local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+            function ListServers(cursor)
+            local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+            return Http:JSONDecode(Raw)
+            end
+            local Server, Next; repeat
+            local Servers = ListServers(Next)
+            Server = Servers.data[1]
+            Next = Servers.nextPageCursor
+            until Server
+            TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
+        end)
+        -- Change Server
+        ServerSection:NewButton("Change Server", "Change to the Different Server", function()
+            local HTTPS = game:GetService("HttpService")
+            local TPS = game:GetService("TeleportService")
+            local SERVERS = HTTPS:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+            local f = false
+            for _,v in pairs(SERVERS.data) do
+                if v.playing < v.maxPlayers and v.id ~= game.JobId then
+                    TPS:TeleportToPlaceInstance(game.PlaceId, v.id)
+                    f = true
+                end
+            end
+            if not f then print("No different server found!") end
+        end)
+    
+    -- Tools
+    local Tools = Window:NewTab("Tools")
+    local ToolsSection = Tools:NewSection("Tools")
+         --Simple Spy 2
+        ToolsSection:NewButton("Simple Spy 2", "Remote Spy", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/medamen/MedLab/main/JamesBond2.lua", true))()
+         end)
+         --Turtle Spy
+        ToolsSection:NewButton("Turtle Spy", "Remote Spy", function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/BDhSQqUU", true))()
+         end)
+         --Infinite Yield
+        ToolsSection:NewButton("Inf Yield", "CMDS", function()
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+         end)
+         --Print Object Names
+        ToolsSection:NewButton("Print Object Names", "Tool", function()
+            local tool = Instance.new("Tool")
+            tool.Name = "Print Clicked Object Name"
+            tool.RequiresHandle = false
+            tool.CanBeDropped = false
+            tool.Parent = game.Players.LocalPlayer.Backpack
+            tool.Equipped:Connect(function(mouse)
+            mouse.Button1Down:connect(function()
+            if mouse.Target and mouse.Target.Parent then
+            print(mouse.Target.Name.." | "..mouse.Target:GetFullName())
+            end
+            end)
+            end)
+         end)
+
+    -- Setting
+    local Setting = Window:NewTab("Setting")
+    local SettingSection = Setting:NewSection("Setting")
+        -- Toggle UI
+        SettingSection:NewKeybind("Toggle UI", "KeybindInfo", Enum.KeyCode.RightControl, function()
+            Library:ToggleUI()
+        end)
+
+    -- Credits
+    local Credits = Window:NewTab("Credits")
+    local CreditsSection = Credits:NewSection("Credits")
+
+-- 🛒🧒 Retail Tycoon 2
+elseif game.PlaceId == 5865858426 then
+    local Library   = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+    local Window    = Library.CreateLib("MedLab | 🛒🧒 Retail Tycoon 2", "Midnight")
+        -- Bypass GUI Detection
+        local CoreGui = game.CoreGui
+        local ContentProvider = game.ContentProvider
+        local RobloxGuis = {"RobloxGui", "TeleportGui", "RobloxPromptGui", "RobloxLoadingGui", "PlayerList", "RobloxNetworkPauseNotification", "PurchasePrompt", "HeadsetDisconnectedDialog", "ThemeProvider", "DevConsoleMaster"}
+        local function FilterTable(tbl)
+            local context = syn_context_get()
+            syn_context_set(7)
+            local new = {}
+            for i,v in ipairs(tbl) do --roblox iterates the array part
+                if typeof(v) ~= "Instance" then
+                    table.insert(new, v)
+                else
+                    if v == CoreGui or v == game then
+                        --insert only the default roblox guis
+                        for i,v in pairs(RobloxGuis) do
+                            local gui = CoreGui:FindFirstChild(v)
+                            if gui then
+                                table.insert(new, gui)
+                            end
+                        end
+                        if v == game then
+                            for i,v in pairs(game:GetChildren()) do
+                                if v ~= CoreGui then
+                                    table.insert(new, v)
+                                end
+                            end
+                        end
+                    else
+                        if not CoreGui:IsAncestorOf(v) then
+                            table.insert(new, v)
+                        else
+                            --don't insert it if it's a descendant of a different gui than default roblox guis
+                            for j,k in pairs(RobloxGuis) do
+                                local gui = CoreGui:FindFirstChild(k)
+                                if gui then
+                                    if v == gui or gui:IsAncestorOf(v) then
+                                        table.insert(new, v)
+                                        break
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            syn_context_set(context)
+            return new
+        end
+
+        local old
+        old = hookfunc(ContentProvider.PreloadAsync, function(self, tbl, cb)
+            if self ~= ContentProvider or type(tbl) ~= "table" or type(cb) ~= "function" then --note: callback can be nil but in that case it's useless anyways
+                return old(self, tbl, cb)
+            end
+
+            --check for any errors that I might've missed (such as table being {[2] = "something"} which causes "Unable to cast to Array")
+            local err
+            task.spawn(function() --TIL pcalling a C yield function inside a C yield function is a bad idea ("cannot resume non-suspended coroutine")
+                local s,e = pcall(old, self, tbl)
+                if not s and e then
+                    err = e
+                end
+            end)
+        
+            if err then
+                return old(self, tbl) --don't pass the callback, just in case
+            end
+
+            tbl = FilterTable(tbl)
+            return old(self, tbl, cb)
+        end)
+
+        local old
+        old = hookmetamethod(game, "__namecall", function(self, ...)
+            local method = getnamecallmethod()
+            if self == ContentProvider and (method == "PreloadAsync" or method == "preloadAsync") then
+                local args = {...}
+                if type(args[1]) ~= "table" or type(args[2]) ~= "function" then
+                    return old(self, ...)
+                end
+
+                local err
+                task.spawn(function()
+                    setnamecallmethod(method) --different thread, different namecall method
+                    local s,e = pcall(old, self, args[1])
+                    if not s and e then
+                        err = e
+                    end
+                end)
+
+                if err then
+                    return old(self, args[1])
+                end
+
+                args[1] = FilterTable(args[1])
+                setnamecallmethod(method)
+                return old(self, args[1], args[2])
+            end
+            return old(self, ...)
+        end)
+        
+        -- Values
+        local PP    = game.Players.LocalPlayer
+        local PP2   = PP.Character.Humanoid
+        local PP3   = PP.Character.HumanoidRootPart
+        local WS    = game.Workspace
+        local GSTS  = game:GetService("TeleportService")
+        local GSP   = game:GetService("Players")
+
+    -- Main
+    local Main        = Window:NewTab("Main")
+    local MainSection = Main:NewSection("Main")
+        -- Auto Load Unload Truck
+        MainSection:NewButton("Instant Delivery", "", function()
+            local Client = game:GetService("Players").LocalPlayer
+            local GetPlot = function() return getrenv()._G.Plot end
+            local GetLoadingDock = function()
+            local Plot = tostring(GetPlot())
+            local DockNum = string.gsub(Plot, "Plot_", "")
+            return game:GetService("Workspace").Map.Landmarks["Loading Dock"]["LoadingDock_" .. DockNum].LoadingSpot
+            end
+            local GetVehicle; GetVehicle = function()
+                for _, v in next, workspace.PlayerVehicles:GetChildren() do
+                    if v.Name:match(Client.Name) then
+                        return v
+                    end
+                end
+                game:GetService("ReplicatedStorage").Remotes.SpawnVehicle:InvokeServer(1, Client.Character.HumanoidRootPart.CFrame * CFrame.new(10, 5, 0))
+                task.wait()
+                return GetVehicle()
+            end
+            local LoadCar = function()
+                local Vehicle = GetVehicle()
+                Vehicle:SetPrimaryPartCFrame(GetLoadingDock().CFrame)
+                Client.Character:SetPrimaryPartCFrame(Vehicle.PrimaryPart.CFrame * CFrame.new(5, 0, 0))
+                task.wait(.5)
+                game:GetService("ReplicatedStorage").Remotes.LoadVehicle:InvokeServer()
+            end
+            local UnloadCar = function()
+                for i, v in next, GetPlot():GetDescendants() do
+                    if v.Name:lower():match("door") then
+                        if v:FindFirstChild("Handle") and v:FindFirstChild("Base") then
+                            local Vehicle = GetVehicle()
+                            Vehicle:SetPrimaryPartCFrame(CFrame.new(v.Base.Position + Vector3.new(10, 6, 10)))
+                            Client.Character:SetPrimaryPartCFrame(Vehicle.PrimaryPart.CFrame * CFrame.new(5, 0, 0))
+                            task.wait(.5)
+                            game:GetService("ReplicatedStorage").Remotes.UnloadVehicle:InvokeServer()
+                        end
+                    end
+                end
+            end
+            local GetBoughtStuff = function()
+                LoadCar()
+                task.wait()
+                UnloadCar()
+            end
+            GetBoughtStuff()
+        end)
+        MainSection:NewButton("Auto Purchase & Restock", "", function()
+            getgenv().settings = {
+                ['AutoRestock'] = {
+                    ['Enabled'] = true,
+                    ['Delay'] = 5, -- seconds 
+                }
+            }
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local Sellables = ReplicatedStorage.Sellables
+            local Remotes = ReplicatedStorage.Remotes
+            local BuyStorage = Remotes.BuyStorage
+            local StockShelfFunction = Remotes.StockShelfFunction
+            local function getPlot()
+                for index, value in next, getgc(true) do 
+                    if type(value) == "table" and rawget(value, "Plot") then 
+                        return value.Plot
+                    end
+                end
+            end
+            local Plot = getPlot()
+            local function TypeToBuy(Item) 
+                for index, value in next, Sellables:GetChildren() do 
+                    if value:FindFirstChild(Item,true) then 
+                        return value.Name 
+                    end
+                end
+            end
+            local function BuyAllItems()
+                for Index, Value in next, Plot.Objects:GetChildren() do
+                    for Index, Value in next, Value:GetChildren() do 
+                        if Value:FindFirstChild("Sellables") then 
+                            local AmountToBuy = #Value.Sellables.Items:GetChildren() - Value.SellableAmount.Value 
+                            if AmountToBuy > 0 then 
+                                BuyStorage:InvokeServer(TypeToBuy(Value.Sellable.Value),AmountToBuy,true)
+                                wait(.1)
+                                StockShelfFunction:InvokeServer(Value, Value.Sellable.Value)
+                            end
+                        end
+                    end
+                end
+            end
+            while settings['AutoRestock'].Enabled do 
+                BuyAllItems()
+                wait(settings['AutoRestock'].Delay)
+            end
+        end)
+        MainSection:NewButton("Anti AFK", "", function()
+            for Index, Value in next, getconnections(game:GetService("Players").LocalPlayer.Idled) do
+                Value:Disable()
+                end
         end)
 
     -- Player
